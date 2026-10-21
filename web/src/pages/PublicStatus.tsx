@@ -9,7 +9,10 @@ export function PublicStatusPage() {
   const { slug } = useParams<{ slug: string }>();
   const { data, isLoading, isError, refetch, isFetching } = useQuery({
     queryKey: ["public-status", slug],
-    queryFn: () => apiPublic<PublicStatusPage>(`/api/public/status/${slug}`),
+    queryFn: async () => {
+      const response = await apiPublic<{ statusPage: PublicStatusPage }>(`/api/public/status/${slug}`);
+      return response.statusPage;
+    },
     enabled: !!slug,
     refetchInterval: 30_000,
   });
